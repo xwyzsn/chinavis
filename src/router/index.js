@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import dataV from '@jiaminghi/data-view'
 
+Vue.use(dataV)
 Vue.use(VueRouter)
 
 /*
