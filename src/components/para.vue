@@ -38,7 +38,7 @@ export default {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("http://localhost:8003/"+this.area+".csv", function(error, cars) {
+    d3.csv("https://xwyzsn.site/chinavis/"+this.area+".csv", function(error, cars) {
 
       // Extract the list of dimensions and create a scale for each.
 
@@ -49,7 +49,7 @@ export default {
       });
 
       x.domain(dimensions);
-      console.log(dimensions)
+
       // this.dimensions=dimension
       // Add grey background lines for context.
       background = svg.append("g")

@@ -1,5 +1,8 @@
 <template>
+  <div>
 <div id="cand"></div>
+<!--  <div>{{pol}}</div>-->
+  </div>
 </template>
 
 <script>
@@ -15,6 +18,7 @@ export default {
     year:String,
     area:String,
     pollution:String,
+    polu:Object
     // is_drill:Boolean
   },
   data(){
@@ -27,158 +31,169 @@ export default {
       total_data:null,
       months :['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       send_area:"中华人民共和国",
+      render:false
 
 
     }
   },
+  computed:{
+    pol :{
+      get:function (){
+         return this.$store.getters["polution/getPolution"]},
+      set:function (newVal){
+        this.render=!this.render
 
-  mounted() {
-    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    fetch('http://localhost:8003/t.json')
-      .then(res => res.json())
-      .then(data => {
-        function getMonthWeek(date) {
-          const year = date.getFullYear();
-          const month = date.getMonth();
-          const monthFirst = new Date(year, month, 0);
-          const intervalDays = Math.round((date.getTime() - monthFirst.getTime()) / 86400000);
-          const index = Math.floor((intervalDays + monthFirst.getDay()) / 7);
-          return index;
-        }
+      }
+    }
 
-        var data_set=[]
-        this.total_data = this.deepCopyObj(data)
-        var area = this.area
-        // if(!this.is_drill){
-        //   area = "中华人民共和国";
-        // }
-        data_set = data[area]
+  },
+  watch:{
+      polu(newVal,oldVal){
+        if (JSON.stringify(newVal) !== '{}') {
+          const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        var _data = data_set.filter(d=>{
+          var data = newVal
+          function getMonthWeek(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const monthFirst = new Date(year, month, 0);
+            const intervalDays = Math.round((date.getTime() - monthFirst.getTime()) / 86400000);
+            const index = Math.floor((intervalDays + monthFirst.getDay()) / 7);
+            return index;
+          }
 
-          return (d.date>=this.year+"-01-01" && d.date<=this.year+"-12-31")})
+          var data_set=[]
+          this.total_data = this.deepCopyObj(data)
+          var area = this.area
+          // if(!this.is_drill){
+          //   area = "中华人民共和国";
+          // }
+          data_set = data[area]
 
-        _data.forEach(function (obj) {
-          const date = new Date(obj['date']);
-          const month = date.getMonth();
-          obj.month = MONTHS[month];
-          obj.day = date.getDay();
-          obj.week = getMonthWeek(date).toString();
-        });
-        const dv = new DataSet().createView();
-        dv.source(_data)
-          .transform({
-            type: 'sort-by',
-            fields: ['day'],
-            order: 'DESC'
+          var _data = data_set.filter(d=>{
+
+            return (d.date>=this.year+"-01-01" && d.date<=this.year+"-12-31")})
+
+          _data.forEach(function (obj) {
+            const date = new Date(obj['date']);
+            const month = date.getMonth();
+            obj.month = MONTHS[month];
+            obj.day = date.getDay();
+            obj.week = getMonthWeek(date).toString();
+          });
+          const dv = new DataSet().createView();
+          dv.source(_data)
+            .transform({
+              type: 'sort-by',
+              fields: ['day'],
+              order: 'DESC'
+            });
+
+          const chart = new Chart({
+            container: 'cand',
+            autoFit: true,
+            height: 400,
+            padding: [40, 20,20, 10]
+          });
+          this.chart = chart
+          this.Data = dv.rows
+          chart.data(_data);
+          chart.scale({
+            PM2: {
+              type: 'linear',
+              min: 0,
+              max: 200,
+              sync: true
+            },
+            PM10:{
+              type:'linear',
+              min:0,
+              max:400,
+              sync:true
+            },
+            SO2:{
+              type:'linear',
+              min:0,
+              max:100,
+              sync:true
+            },
+            CO:{
+              type:'linear',
+              min:0,
+              max:8,
+              sync:true
+            },
+            O3:{
+              type:"linear",
+              min:0,
+              max:250,
+              sync:true
+            },
+            NO2:{
+              type:"linear",
+              min:0,
+              max:200
+            },
+            date: {
+              type: 'time'
+            },
+            day: {
+              type: 'cat'
+            },
+            week:{
+              type:"cat",
+              values: ['6','5', '4', '3', '2', '1', '0']
+            }
+          });
+          //
+          chart.axis(false);
+          chart.legend(this.pollution, {
+            offset: 0
+          });
+          chart.tooltip({
+            title: 'date',
+            showMarkers: false
+          });
+          chart.facet('list', {
+            fields: ['month'],
+            cols: 3,
+            padding: [0, 15, 30, 15],
+            columnTitle: {
+              offsetY: -10,
+              style: {
+                fontSize: 12,
+                textAlign: 'center',
+                fill: '#666'
+              }
+            },
+            eachView: view => {
+              view.polygon().position('day*week')
+                .color(this.pollution, '#E3F6FF-#85C6FF-#0086FA-#0A61D7-#F51D27-#FA541C-#FFBE15-#FFF2D1')
+                .style({
+                  lineWidth: 1,
+                  stroke: '#fff'
+                });
+            }
+          });
+          //
+          chart.on('annotation-text:click',(e)=> {
+            const mon = e.target.attrs.text;
+            bus.$emit('sendMonth',mon,this.send_area)
+
           });
 
-        const chart = new Chart({
-          container: 'cand',
-          autoFit: true,
-          height: 400,
-          padding: [40, 20,20, 10]
-        });
-        this.chart = chart
-        this.Data = dv.rows
-        chart.data(_data);
-        chart.scale({
-          PM2: {
-            type: 'linear',
-            min: 0,
-            max: 200,
-            sync: true
-          },
-          PM10:{
-            type:'linear',
-            min:0,
-            max:400,
-            sync:true
-          },
-          SO2:{
-            type:'linear',
-            min:0,
-            max:100,
-            sync:true
-          },
-          CO:{
-            type:'linear',
-            min:0,
-            max:8,
-            sync:true
-          },
-          O3:{
-            type:"linear",
-            min:0,
-            max:250,
-            sync:true
-          },
-          NO2:{
-            type:"linear",
-            min:0,
-            max:200
-          },
-          date: {
-            type: 'time'
-          },
-          day: {
-            type: 'cat'
-          },
-          week:{
-            type:"cat",
-            values: ['6','5', '4', '3', '2', '1', '0']
-          }
-        });
-        //
-        chart.axis(false);
-        chart.legend(this.pollution, {
-          offset: 0
-        });
-        chart.tooltip({
-          title: 'date',
-          showMarkers: false
-        });
-        chart.facet('list', {
-          fields: ['month'],
-          cols: 3,
-          padding: [0, 15, 30, 15],
-          columnTitle: {
-            offsetY: -10,
-            style: {
-              fontSize: 12,
-              textAlign: 'center',
-              fill: '#666'
-            }
-          },
-          eachView: view => {
-            view.polygon().position('day*week')
-              .color(this.pollution, '#E3F6FF-#85C6FF-#0086FA-#0A61D7-#F51D27-#FA541C-#FFBE15-#FFF2D1')
-              .style({
-                lineWidth: 1,
-                stroke: '#fff'
-              });
-          }
-        });
-        //
-        chart.on('annotation-text:click',(e)=> {
-          const mon = e.target.attrs.text;
-          bus.$emit('sendMonth',mon,this.send_area)
+          chart.interaction('element-active');
+          chart.on('element:click',(e)=>{
 
-        });
+            bus.$emit('click_date',this.deepCopyObj(e.data.data))
 
+          })
+          chart.render();
+        }
 
-
-
-        chart.interaction('element-active');
-        chart.on('element:click',(e)=>{
-          console.log(e.data.data)
-          bus.$emit('click_date',this.deepCopyObj(e.data.data))
-
-        })
-        chart.render();
-      });
-
-
+      }
+  },
+  mounted() {
 
   },
   methods:{

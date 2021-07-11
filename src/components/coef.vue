@@ -100,7 +100,8 @@ export default {
     }
   },
   mounted() {
-    fetch('http://localhost:8003/coef.json').then(res=>res.json()).then(d=>{
+    var d = require('../assets/coef.json')
+
       this.total_data=d
       var data = d[this.area]
       var fianl=new Array()
@@ -366,7 +367,7 @@ export default {
       // chart.legend(false)
       view.legend(true)
       chart.render();
-    })
+
   }
 }
 </script>

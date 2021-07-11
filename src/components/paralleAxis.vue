@@ -24,12 +24,23 @@ export default {
   props:{
     area:String,
     month:Number,
+    polu:Array
   },
   data(){
     return{
       chart:null,
       Data:null
     }
+  },
+  watch:{
+    polu(newVal,oldVal){
+      if(JSON.stringify(newVal)!=='{}'){
+
+
+
+      }
+    }
+
   },
   methods:{
     deepCopyObj(obj) {
@@ -71,7 +82,7 @@ export default {
   },
   mounted() {
 
-    fetch('http://localhost:8003/t.json').then(res=>res.json()).then(d =>{
+    fetch('https://xwyzsn.site/chinavis/t.json').then(res=>res.json()).then(d =>{
       this.Data = this.deepCopyObj(d)
 
       var _data = this.deepCopyObj(d[this.area])
