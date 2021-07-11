@@ -1,6 +1,8 @@
 # air-polution (air-polution)
 
 这是一个基于China vis(2021年)的数据集-大气污染分析可视化的分析
+<br/>
+页面预览 点击https://xwyzsn.github.io/chinavis/#/
 
 前端框架:前端框架 [quasar](https://github.com/quasarframework/quasar)
 
@@ -40,8 +42,8 @@ quasar dev
 
 ## ToDo
 
-1. 在线演示demo待添加
-2. 代码待重构优化
+1. ~~在线演示demo待添加~~ **从后端的API获取数据**。:upside_down_face
+2. ~~代码待重构优化~~ **使用vuex重构了组件之间的数据传输，提高了效率**  :upside_down_face:
 
 
 
