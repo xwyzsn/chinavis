@@ -82,7 +82,7 @@ export default {
   },
   mounted() {
 
-    fetch('https://xwyzsn.site/chinavis/t.json').then(res=>res.json()).then(d =>{
+    fetch('https://api.xwyzsn.site/chinavis/t.json').then(res=>res.json()).then(d =>{
       this.Data = this.deepCopyObj(d)
 
       var _data = this.deepCopyObj(d[this.area])

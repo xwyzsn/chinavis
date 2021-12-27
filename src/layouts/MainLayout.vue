@@ -266,7 +266,7 @@ export default {
       months,
       days,
       polution_type:"PM2",
-      base_url:'https://xwyzsn.site/chinavis/CN-Reanalysis',
+      base_url:'https://api.xwyzsn.site/chinavis/CN-Reanalysis',
       scene:null,
       dv:null,
       drill:null,
@@ -442,7 +442,7 @@ export default {
     this.$store.commit('polution/setPolution',data)
 
 
-    fetch("https://xwyzsn.site/chinavis/distrinct_map.json").then(res =>res.json()).then(d =>{
+    fetch("https://api.xwyzsn.site/chinavis/distrinct_map.json").then(res =>res.json()).then(d =>{
       this.distrinct=d;
     })
 

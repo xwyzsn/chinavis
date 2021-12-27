@@ -1,5 +1,5 @@
 <template>
-  <div id="q-app" style="text-decoration: line-through">
+  <div id="q-app">
     <q-ajax-bar
       ref="bar"
       position="top"

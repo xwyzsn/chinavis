@@ -38,7 +38,7 @@ export default {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("https://xwyzsn.site/chinavis/"+this.area+".csv", function(error, cars) {
+    d3.csv("https://api.xwyzsn.site/chinavis/"+this.area+".csv", function(error, cars) {
 
       // Extract the list of dimensions and create a scale for each.
 

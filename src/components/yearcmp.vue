@@ -1,6 +1,8 @@
 <template>
-  <div style="height: 100%;width: 80%;margin-left: 10%" id="year-cmp" />
-
+  <div style="height: 100%;width: 80%;margin-left: 10%;text-align:center;font-size:50px" id="year-cmp" >
+    数据只有一年所以这里不显示.
+    </div>
+    
 </template>
 
 <script>

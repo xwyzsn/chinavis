@@ -43,7 +43,7 @@ quasar dev
 
 ## ToDo
 
-1. ~~在线演示demo待添加~~ **从后端的API获取数据**。:upside_down_face
+1. ~~在线演示demo待添加~~ **从后端的API获取数据**  :upside_down_face
 2. ~~代码待重构优化~~ **使用vuex重构了组件之间的数据传输，提高了效率**  :upside_down_face:
 
 
