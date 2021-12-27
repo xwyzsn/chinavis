@@ -1,4 +1,4 @@
-# 🎗️ 原先服务器过期了,API还没迁移到新得服务器,page暂不可用
+# ~~🎗️ 原先服务器过期了,API还没迁移到新得服务器,page暂不可用~~
 # air-polution (air-polution)
 
 这是一个基于China vis(2021年)的数据集-大气污染分析可视化的分析
@@ -43,7 +43,7 @@ quasar dev
 
 ## ToDo
 
-1. ~~在线演示demo待添加~~ **从后端的API获取数据**  :upside_down_face
+1. ~~在线演示demo待添加~~ **从后端的API获取数据**  :upside_down_face:
 2. ~~代码待重构优化~~ **使用vuex重构了组件之间的数据传输，提高了效率**  :upside_down_face:
 
 
